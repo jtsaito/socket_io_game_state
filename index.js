@@ -14,6 +14,10 @@ io.on('connection', function(socket){
   socket.on('setPlayer', function(msg){
     io.emit('setPlayer', msg);
   });
+
+  socket.on('speedTest', function(msg){
+    io.emit('speedTest', { sent: msg.sent, on_server: new Date().getTime() } );
+  });
 });
 
 

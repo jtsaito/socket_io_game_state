@@ -48,22 +48,21 @@
 
       var localPlayer = $("#player").val();
 
-      if(localPlayer === remotePlayer) { 
+      if(localPlayer === remotePlayer) {
         me = 'p1';
       }
-      else { 
+      else {
         me = 'p2';
       }
       console.log("me: " + me);
 
     });
 
-
     // Canvas
     var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
 
-    document.addEventListener('keydown', function(e) { 
+    document.addEventListener('keydown', function(e) {
 
       if (e.keyCode == 87) {  //  w key
         world[me].y = world[me].y - 10;
@@ -101,6 +100,21 @@
     };
 
     render(world);
+
+
+    // Speed test
+    socket.on('speedTest', function(msg){
+      console.log('on server: ' + (msg.on_server - msg.sent) + ' ms');
+      console.log('on client: ' + (new Date().getTime() - msg.sent) + ' ms');
+      console.log("---");
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.keyCode == 88) {  //  x key
+        socket.emit('speedTest', { sent: new Date().getTime() });
+      }
+    }, false);
+
   </script>
 
   </body>
