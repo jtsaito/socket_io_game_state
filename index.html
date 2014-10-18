@@ -27,74 +27,81 @@
     }
   </script>
 
-
   <canvas id="myCanvas" width="800" height="600" style="border:1px solid #c3c3c3;" >
     Your browser does not support the HTML5 canvas tag.
   </canvas>
 
 
+  <script>
+    var me = "";
+    var world = { "p1": { x: 200, y: 200}, "p2": { x: 200, y: 400} };
 
-    <script>
+    // Socket
+    var socket = io();
 
-      var me = "";
-
-      // Sockets
-      var socket = io();
-
-      $('form').submit(function(){
-        return false;
-      });
-
-      socket.on('world', function(msg){
-        console.log(msg);
-      });
-
-      socket.on('setPlayer', function(remotePlayer){
-          console.log("remote player: " + remotePlayer);
-          var localPlayer = $("#player").val();
-          console.log("local  player: " + localPlayer);
-
-          if(localPlayer === remotePlayer) { 
-            me = 'p1';
-          }
-          else { 
-            me = 'p2';
-          }
-          console.log("me: " + me);
-      });
-
-
-      // Canvas
-      var c = document.getElementById("myCanvas");
-      var ctx = c.getContext("2d");
-      var world = { "p1": { x: 200, y: 200}, "p2": { x: 200, y: 400} };
-
-      document.addEventListener('keydown', function(e) { 
-        if (e.keyCode == 87) {
-          socket.emit('world', world);
-        }
-      }, false);
-
-
-      console.log(world);
-
+    socket.on('world', function(new_world){
+      world = new_world;
       render(world);
+    });
 
-      function render(world) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, 800, 600);
-        render_player(world.p1, "#00ff00");
-        render_player(world.p2, "#ff00ff");
-        ctx.fillStyle = "#000000";
-      };
+    socket.on('setPlayer', function(remotePlayer){
 
-      function render_player(player, color) {
-        ctx.fillStyle = color;
-        ctx.fillRect(player.x, player.y, 50, 30);
-        ctx.fillStyle = "#000000";
-      };
+      var localPlayer = $("#player").val();
 
-    </script>
+      if(localPlayer === remotePlayer) { 
+        me = 'p1';
+      }
+      else { 
+        me = 'p2';
+      }
+      console.log("me: " + me);
+
+    });
+
+
+    // Canvas
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+
+    document.addEventListener('keydown', function(e) { 
+
+      if (e.keyCode == 87) {  //  w key
+        world[me].y = world[me].y - 10;
+      }
+
+      if (e.keyCode == 83) {  //  s key
+        world[me].y = world[me].y + 10;
+      }
+
+      if (e.keyCode == 65) {  //  a key
+        world[me].x = world[me].x - 10;
+      }
+
+      if (e.keyCode == 68) {  //  d key
+        world[me].x = world[me].x + 10;
+      }
+
+      socket.emit('world', world);
+    }, false);
+
+
+    // World
+    function render(world) {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, 800, 600);
+      render_player(world.p1, "#00ff00");
+      render_player(world.p2, "#ff00ff");
+      ctx.fillStyle = "#000000";
+    };
+
+    function render_player(player, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(player.x, player.y, 50, 30);
+      ctx.fillStyle = "#000000";
+    };
+
+    render(world);
+  </script>
 
   </body>
 </html>
