@@ -7,10 +7,15 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.on('world', function(msg){
+    io.emit('world', msg);
+  });
+
+  socket.on('setPlayer', function(msg){
+    io.emit('setPlayer', msg);
   });
 });
+
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
