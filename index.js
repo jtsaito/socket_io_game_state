@@ -11,13 +11,14 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   socket.on('action', function(action){
-    if(action) { 
+    if(action) {
       update(action);
       io.emit('world', world);
     }
   });
 
   socket.on('setPlayer', function(msg){
+    console.log('msg:', msg);
     io.emit('setPlayer', msg);
   });
 

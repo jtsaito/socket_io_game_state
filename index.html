@@ -16,14 +16,14 @@
 
 
   <form id="player-form" action="">
-    Player: <input type="text" id="player"><br>
-    <input type="button" onclick="submitPlayer()" value="Submit">
+    <input type="button" onclick="submitPlayer()" value="Start with me as Player 1">
   </form>
 
   <script>
+    var seed = Math.random();
     function submitPlayer() {
       var player = document.getElementById("player-form").elements[0].value;
-      socket.emit('setPlayer', player);
+      socket.emit('setPlayer', seed);
     }
   </script>
 
@@ -43,17 +43,12 @@
     });
 
     socket.on('setPlayer', function(remotePlayer){
+      console.log("remotePlayer: " + remotePlayer);
+      console.log("seed: " + seed);
 
-      var localPlayer = $("#player").val();
-
-      if(localPlayer === remotePlayer) {
-        me = 'p1';
-      }
-      else {
-        me = 'p2';
-      }
+      me = seed === remotePlayer ? 'p1' : 'p2';
       console.log("me: " + me);
-
+      socket.emit('action', { actor: me, action: '23' } );
     });
 
     // Canvas
@@ -61,23 +56,13 @@
     var ctx = c.getContext("2d");
 
     document.addEventListener('keydown', function(e) {
-
       var action;
 
-      if (e.keyCode == 87) {  //  w key
-        action = 'up';
-      }
-
-      if (e.keyCode == 83) {  //  s key
-        action = 'down';
-      }
-
-      if (e.keyCode == 65) {  //  a key
-        action = 'left';
-      }
-
-      if (e.keyCode == 68) {  //  d key
-        action = 'right';
+      switch(e.keyCode) {
+        case 87: action =    'up'; break;
+        case 83: action =  'down'; break;
+        case 65: action =  'left'; break;
+        case 68: action = 'right'; break;
       }
 
       if(action) {
@@ -85,8 +70,6 @@
       }
     }, false);
 
-
-    // World
     function render(world) {
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, 800, 600);
