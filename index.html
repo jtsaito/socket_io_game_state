@@ -34,13 +34,11 @@
 
   <script>
     var me = "";
-    var world = { "p1": { x: 200, y: 200}, "p2": { x: 200, y: 400} };
 
     // Socket
     var socket = io();
 
-    socket.on('world', function(new_world){
-      world = new_world;
+    socket.on('world', function(world){
       render(world);
     });
 
@@ -64,23 +62,27 @@
 
     document.addEventListener('keydown', function(e) {
 
+      var action;
+
       if (e.keyCode == 87) {  //  w key
-        world[me].y = world[me].y - 10;
+        action = 'up';
       }
 
       if (e.keyCode == 83) {  //  s key
-        world[me].y = world[me].y + 10;
+        action = 'down';
       }
 
       if (e.keyCode == 65) {  //  a key
-        world[me].x = world[me].x - 10;
+        action = 'left';
       }
 
       if (e.keyCode == 68) {  //  d key
-        world[me].x = world[me].x + 10;
+        action = 'right';
       }
 
-      socket.emit('action', world);
+      if(action) {
+        socket.emit('action', { actor: me, action: action } );
+      }
     }, false);
 
 
@@ -98,8 +100,6 @@
       ctx.fillRect(player.x, player.y, 50, 30);
       ctx.fillStyle = "#000000";
     };
-
-    render(world);
 
 
     // Speed test
