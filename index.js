@@ -7,7 +7,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('world', function(msg){
+  socket.on('action', function(msg){
     io.emit('world', msg);
   });
 
