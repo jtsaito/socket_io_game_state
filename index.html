@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>socket.io</title>
     <style>
       * { margin: 100; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -27,7 +27,7 @@
     }
   </script>
 
-  <canvas id="myCanvas" width="800" height="600" style="border:1px solid #c3c3c3;" >
+  <canvas id="gameCanvas" width="800" height="600" style="border:1px solid #c3c3c3;" >
     Your browser does not support the HTML5 canvas tag.
   </canvas>
 
@@ -52,7 +52,7 @@
     });
 
     // Canvas
-    var c = document.getElementById("myCanvas");
+    var c = document.getElementById("gameCanvas");
     var ctx = c.getContext("2d");
 
     document.addEventListener('keydown', function(e) {

@@ -18,7 +18,6 @@ io.on('connection', function(socket){
   });
 
   socket.on('setPlayer', function(msg){
-    console.log('msg:', msg);
     io.emit('setPlayer', msg);
   });
 
