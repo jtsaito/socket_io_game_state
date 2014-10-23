@@ -14,6 +14,17 @@
 
   <body>
 
+  <audio id="audiotag1" src="jump.mp3" preload="auto"></audio>
+
+  <script>
+    function playSound(tag) {
+      document.getElementById(tag).play();
+    }
+  </script>
+
+  <div onmousedown="playSound('audiotag1')">
+    hello
+  </div>
 
   <form id="player-form" action="">
     <input type="button" onclick="submitPlayer()" value="Start with me as Player 1">

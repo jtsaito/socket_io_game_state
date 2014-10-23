@@ -35,3 +35,7 @@ update = (action) ->
     when 'down'  then world[actor].y = world[actor].y + 10
     when 'left'  then world[actor].x = world[actor].x - 10
     when 'right' then world[actor].x = world[actor].x + 10
+
+
+app.get '/jump.mp3', (req, res) ->
+  res.sendfile('jump.mp3')
